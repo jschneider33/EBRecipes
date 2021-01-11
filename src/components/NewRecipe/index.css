@@ -1,0 +1,27 @@
+.divMain{
+    font-family: 'Playfair Display', serif;
+    padding: 20px;
+    text-align: center;
+}
+.newUrlForm{
+    margin: 40px auto;
+}
+.newUrlInput{
+    margin: 0 20px;
+    width: 500px;
+    padding: 5px 10px;
+}
+.submitUrlButton{
+    background-color: white;
+    border-radius: 5px;
+    border: 2px solid #a3d2ca;
+    margin: 20px;
+    padding: 10px;
+    font-weight: bold;
+}
+.submitUrlButton:hover{
+    background-color: #a3d2ca;
+    border-radius: 5px;
+    border: 2px solid #a3d2ca;
+    color: #f8f1f1;
+}

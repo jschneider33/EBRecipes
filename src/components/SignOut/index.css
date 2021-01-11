@@ -1,0 +1,16 @@
+.signOutButton{
+    background-color: #f8f1f1;
+    border: 1px solid #f8f1f1;
+    border-radius: 5px;
+    box-shadow: 0 0 20px -15px;
+    padding: 0 10px;
+    margin-left: 10px;
+    font-weight: bold;
+}
+.signOutButton:hover{
+    background-color: #a3d2ca;
+    border: 1px solid #f8f1f1;
+    color: #f8f1f1;
+    box-shadow: 0;
+    font-weight: bold;
+}

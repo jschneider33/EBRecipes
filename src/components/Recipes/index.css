@@ -1,0 +1,36 @@
+.recipesMain{
+    padding: 20px 80px;
+}
+.recipeRow{
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 3px 30px -20px;
+    margin: 20px 0;
+    height: 140px;
+    font-family: 'Playfair Display', serif;
+
+}
+.thumbnailDiv{
+    width: 100%;
+    height: 140px;
+    overflow: hidden;
+    border-radius: 10px 0 0 10px;
+}
+.thumbnailImg{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.leftCol{
+    padding: 5px;
+}
+.recTitle{
+    font-size: 1.4rem;
+    color: black;
+}
+.rightCol{
+    padding: 5px;
+}
+.imgCol{
+    padding: 0;
+}

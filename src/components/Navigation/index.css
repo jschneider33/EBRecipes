@@ -1,0 +1,13 @@
+.navbarMain{
+    font-family: 'Playfair Display', serif;
+    background-color: #a3d2ca;
+    height: 60px;
+    font-weight: bold;
+}
+.brandMain{
+    color: white;
+    padding: 0 80px;
+}
+.navMain{
+    padding: 0 80px;
+}
