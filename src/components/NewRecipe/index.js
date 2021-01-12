@@ -74,8 +74,8 @@ class NewRecipeForm extends Component {
 
         req.headers({
             "content-type": "application/xml",
-            "x-rapidapi-key": "5da2a2da31msh2eba020568db14bp1001c3jsnd69bb15bffa5",
-            "x-rapidapi-host": "mycookbook-io1.p.rapidapi.com",
+            "x-rapidapi-key": this.props.firebase.getrapidapikey(),
+            "x-rapidapi-host": this.props.firebase.getrapidapihost(),
             "useQueryString": true
         });
     
