@@ -52,32 +52,32 @@ app.use(function(req, res, next) {
 
 app.post('/cookbook', function(req, res) {
 
-  const { currentUrl } = req.body
+    const { currentUrl } = req.body
 
-  const secretObj = await secret()
+    const secretObj = await secret()
 
-  var options = {
-    method: 'POST',
-    url: 'https://mycookbook-io1.p.rapidapi.com/recipes/rapidapi',
-    headers: {
-      'content-type': 'application/xml',
-      'x-rapidapi-key': secretObj["RAPIDAPI_API_KEY"],
-      'x-rapidapi-host': 'mycookbook-io1.p.rapidapi.com'
-    },
-    data: currentUrl
-  };
-  
-  axios.request(options)
-    .then(res => {
-      // console.log(res.data);
-      const recipeData = res.data.body[0]
-      return res.send(recipeData)
-    })
-    .catch(err => {
-      console.error(error);
-      return res.status(500).send("Error")
-    });
-});
+    var options = {
+      method: 'POST',
+      url: 'https://mycookbook-io1.p.rapidapi.com/recipes/rapidapi',
+      headers: {
+        'content-type': 'application/xml',
+        'x-rapidapi-key': secretObj["RAPIDAPI_API_KEY"],
+        'x-rapidapi-host': 'mycookbook-io1.p.rapidapi.com'
+      },
+      data: currentUrl
+    };
+    
+    axios.request(options)
+      .then(res => {
+        // console.log(res.data);
+        const recipeData = res.data.body[0]
+        return res.send(recipeData)
+      })
+      .catch(err => {
+        console.error(error);
+        return res.status(500).send("Error")
+      });
+  });
 
 // app.post('/cookbook', function(req, res) {
 //   // Add your code here
