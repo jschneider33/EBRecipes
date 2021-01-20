@@ -10,7 +10,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 
 import './index.css';
 
-import unirest from 'unirest';
+// import unirest from 'unirest';
 import axios from 'axios';
 import { API } from "aws-amplify"
 
@@ -25,7 +25,6 @@ import { API } from "aws-amplify"
 //     // </AuthUserContext.Consumer>
 //   );
 
-// Amplify.configure(config)
 
 class NewRecipeForm extends Component {
     constructor(props) {
@@ -38,28 +37,6 @@ class NewRecipeForm extends Component {
             body: [],
         };
       }
-
-    //   componentDidMount() {
-    //     this.setState({ loading: true });
-     
-    //     this.props.firebase.users().on('value', snapshot => {
-    //       const usersObject = snapshot.val();
-     
-    //       const usersList = Object.keys(usersObject).map(key => ({
-    //         ...usersObject[key],
-    //         uid: key,
-    //       }));
-     
-    //       this.setState({
-    //         users: usersList,
-    //         loading: false,
-    //       });
-    //     });
-    //   }
-
-    // componentWillUnmount() {
-    //     this.props.firebase.users().off();
-    //   }
     
     onChange = event => {
       const newUrl = event.target.value;
@@ -91,254 +68,73 @@ class NewRecipeForm extends Component {
             }
           }
 
-          const myInit = {
-            headers: {
-              "content-type": "application/xml",
-              "x-rapidapi-key": process.env.RAPIDAPI_API_KEY,
-              "x-rapidapi-host": 'mycookbook-io1.p.rapidapi.com',
-              "useQueryString": true
-            }, 
-            response: true, // OPTIONAL (return the entire Axios response object instead of only response.data)
-            queryStringParameters: { 
-                body: {"currentUrl": currentUrl},
-                  }
-          }
+// Axios            
+        var options = {
+          method: 'POST',
+          url: 'https://mycookbook-io1.p.rapidapi.com/recipes/rapidapi',
+          headers: {
+            'content-type': 'application/xml',
+            'x-rapidapi-key': process.env.RAPIDAPI_API_KEY,
+            'x-rapidapi-host': 'mycookbook-io1.p.rapidapi.com'
+          },
+          data: currentUrl
+        };
+        
+        axios.request(options)
+          .then(res => {
+            
+            const r = res.data.body[0];
 
-          console.log("Line above API in New Recipe")
-          API
-            .post('mycookbookapi', '/cookbook', {
-              body: {"currentUrl": currentUrl},
-            })
-            .then((data) => {
-              console.log("Successfully entered the API .then")
+            const createdDate = Date.now();
+            const lastUpdated = Date.now();
+            const createdBy = this.props.firebase.auth.currentUser.uid;
+            var newRec = this.props.firebase.addRecipe().push();
+            newRec.set({
+              name: r.name,
+              image: r.images[0],
+              description: r.description,
+              ingredients: r.ingredients,
+              instructions: r.instructions[0].steps,
+              yield: r.yield,
+              prepTime: r["prep-time"],
+              cookTime: r["cook-time"],
+              totalTime: r["total-time"],
+              url: r.url,
+              dateAdded: createdDate,
+              lastUpdated: lastUpdated,
+              uploadedBy: createdBy,
+            });
 
-              const r = data;
-              const createdDate = Date.now();
-              const lastUpdated = Date.now();
-              const createdBy = this.props.firebase.auth.currentUser.uid;
-              var newRec = this.props.firebase.addRecipe().push();
-              newRec.set({
-                name: r.name,
-                image: r.images[0],
-                description: r.description,
-                ingredients: r.ingredients,
-                instructions: r.instructions[0].steps,
-                yield: r.yield,
-                prepTime: r["prep-time"],
-                cookTime: r["cook-time"],
-                totalTime: r["total-time"],
-                url: r.url,
-                dateAdded: createdDate,
-                lastUpdated: lastUpdated,
-                uploadedBy: createdBy,
+            this.props.firebase
+              .addToUserRecList(newRec.key)
+              .set(r.name)
+              .then(console.log("Added to User Recipe List"))
+              .catch(err => {
+                console.log(err);
               });
 
-              this.props.firebase
-                .addToUserRecList(newRec.key)
-                .set(r.name)
-                .then(console.log("Added to User Recipe List"))
-                .catch(err => {
-                  console.log(err);
+            this.props.firebase
+              .addRecipeUserPair(newRec.key)
+              .set(this.props.firebase.auth.currentUser.uid)
+              .then(() => {
+                console.log("Added Recipe User Pair")
+                this.setState({
+                  body: r
+                })
+                this.props.history.push({
+                  pathname: '/'
                 });
-
-              this.props.firebase
-                .addRecipeUserPair(newRec.key)
-                .set(this.props.firebase.auth.currentUser.uid)
-                .then(() => {
-                  console.log("Added Recipe User Pair")
-                  this.setState({
-                    body: r
-                  })
-                  this.props.history.push({
-                    pathname: '/'
-                  });
-                })
-                .catch(err => {
-                  console.log(err);
-                })
               })
-              .catch( err => {
-                console.log(err)
-              });
-
-
-        // var options = {
-        //   method: 'POST',
-        //   url: 'https://mycookbook-io1.p.rapidapi.com/recipes/rapidapi',
-        //   headers: {
-        //     'content-type': 'application/xml',
-        //     'x-rapidapi-key': process.env.RAPIDAPI_API_KEY,
-        //     'x-rapidapi-host': 'mycookbook-io1.p.rapidapi.com'
-        //   },
-        //   data: currentUrl
-        // };
-        
-        // axios.request(options)
-        //   .then(res => {
-            
-        //     const r = res.data.body[0];
-
-        //     const createdDate = Date.now();
-        //     const lastUpdated = Date.now();
-        //     const createdBy = this.props.firebase.auth.currentUser.uid;
-        //     var newRec = this.props.firebase.addRecipe().push();
-        //     newRec.set({
-        //       name: r.name,
-        //       image: r.images[0],
-        //       description: r.description,
-        //       ingredients: r.ingredients,
-        //       instructions: r.instructions[0].steps,
-        //       yield: r.yield,
-        //       prepTime: r["prep-time"],
-        //       cookTime: r["cook-time"],
-        //       totalTime: r["total-time"],
-        //       url: r.url,
-        //       dateAdded: createdDate,
-        //       lastUpdated: lastUpdated,
-        //       uploadedBy: createdBy,
-        //     });
-
-        //     this.props.firebase
-        //       .addToUserRecList(newRec.key)
-        //       .set(r.name)
-        //       .then(console.log("Added to User Recipe List"))
-        //       .catch(err => {
-        //         console.log(err);
-        //       });
-
-        //     this.props.firebase
-        //       .addRecipeUserPair(newRec.key)
-        //       .set(this.props.firebase.auth.currentUser.uid)
-        //       .then(() => {
-        //         console.log("Added Recipe User Pair")
-        //         this.setState({
-        //           body: r
-        //         })
-        //         this.props.history.push({
-        //           pathname: '/'
-        //         });
-        //       })
-        //       .catch(err => {
-        //         console.log(err);
-        //       })
-        //     })
-        //     // .catch( err => {
-        //     //   console.log(err)
-        //     // });
-        //       //})
-        //     .catch(err => {
-        //       console.error(err);
-        //       // return res.status(500).send("Error")
-        //     });
+              .catch(err => {
+                console.log(err);
+              })
+            })
+            .catch(err => {
+              console.error(err);
+              // return res.status(500).send("Error")
+            });
 
         
-    
-        // req.end(res => {
-        //     if (res.error) throw new Error(res.error);
-        
-        //     const r = res.body[0]; 
-        //     const createdDate = Date.now();
-        //     const lastUpdated = Date.now();
-        //     const createdBy = this.props.firebase.auth.currentUser.uid;
-            
-
-        //     const recToAdd = {
-        //       name: r.name,
-        //       image: r.images[0],
-        //       description: r.description,
-        //       ingredients: r.ingredients,
-        //       instructions: r.instructions[0].steps,
-        //       yield: r.yield,
-        //       prepTime: r["prep-time"],
-        //       cookTime: r["cook-time"],
-        //       totalTime: r["total-time"],
-        //       url: r.url,
-        //       dateAdded: createdDate,
-        //       lastUpdated: lastUpdated,
-        //       uploadedBy: createdBy,
-        //     }
-
-        //     var newRec = this.props.firebase.addRecipe().push();
-        //     newRec.set({
-        //       name: r.name,
-        //       image: r.images[0],
-        //       description: r.description,
-        //       ingredients: r.ingredients,
-        //       instructions: r.instructions[0].steps,
-        //       yield: r.yield,
-        //       prepTime: r["prep-time"],
-        //       cookTime: r["cook-time"],
-        //       totalTime: r["total-time"],
-        //       url: r.url,
-        //       dateAdded: createdDate,
-        //       lastUpdated: lastUpdated,
-        //       uploadedBy: createdBy,
-        //     });
-
-
-        //     this.props.firebase
-        //       .addToUserRecList(newRec.key)
-        //       .set(r.name)
-        //       .then(console.log("Added to User Recipe List"))
-        //       .catch(err => {
-        //         console.log(err);
-        //       });
-
-        //     this.props.firebase
-        //       .addRecipeUserPair(newRec.key)
-        //       .set(this.props.firebase.auth.currentUser.uid)
-        //       .then(() => {
-        //         console.log("Added Recipe User Pair")
-        //         this.setState({
-        //           body: r
-        //         })
-        //         this.props.history.push({
-        //           pathname: '/'
-        //         });
-        //       })
-        //       .catch(err => {
-        //         console.log(err);
-        //       })
-
-              
-
-            
-              // .then(() => {
-              //   console.log("Entered Then");
-              // });
-
-            // this.props.firebase
-            //   .addRecipe()
-            //   .push()
-            //   .set({
-            //     name: r.name,
-            //     image: r.images[0],
-            //     description: r.description,
-            //     ingredients: r.ingredients,
-            //     instructions: r.instructions[0].steps,
-            //     yield: r.yield,
-            //     prepTime: r["prep-time"],
-            //     cookTime: r["cook-time"],
-            //     totalTime: r["total-time"],
-            //     url: r.url,
-            //   })
-            //   .then(() => {
-                
-                
-
-            //     this.setState({
-            //       body: r
-            //     })
-            //     this.props.history.push({
-            //       pathname: '/'
-            //     });
-            //   })
-            //   .catch(err => {
-            //     console.log(err);
-            //   })
-
-        // });
-
         e.preventDefault();
 
     }
@@ -374,82 +170,6 @@ class NewRecipeForm extends Component {
           <button type="submit" className="submitUrlButton">Submit</button>
         </form>
 
-        {/* <h3>Recipe info</h3>
-        {rec
-          ? <div>
-              <Container className="mainContainer">
-                <Row className="topRow">
-                    <Col sm={4}>
-                        <div className="mainImgDiv">
-                            <img className="mainImgImg" src={rec.recImage}/>
-                        </div>
-                    </Col>
-                    <Col sm={8}>
-                        <h1 className="recName">
-                            {rec.recName}
-                        </h1>
-                        <Row>
-                            <Col>
-                                <h4 className="recTime">
-                                    Total time: {rec.recTTime}
-                                </h4>
-                            </Col>
-                            <Col>
-                                <h4 className="recTime">
-                                    Cook time: {rec.recCTime}
-                                </h4>
-                            </Col>
-                            <Col>
-                                <h4 className="recTime">
-                                    Prep time: {rec.recPTime}
-                                </h4>
-                            </Col>
-                        </Row>
-                        <h4 className="recYield">
-                            Serves: {rec.recYield}
-                        </h4>
-                        <h6>
-                            {rec.recDescription}
-                        </h6>
-                    </Col>
-                </Row>
-                <Row className="secondRow">
-                    <Col>
-                        <h5 className="ingredientsTitle">Ingredients: </h5>
-                        <div className="ingredDiv">
-                            {rec.recIngreds.map(ingr => (
-                                <p>{ingr}</p>
-                            ))}
-                        </div>
-                    </Col>
-                    <Col>
-                      <h5 className="ingredientsTitle">Instructions: </h5>
-                        <ol>
-                            {rec.recInstr.map(inst => (
-                                <li>
-                                    {inst}
-                                </li>
-                            ))}
-                        </ol>
-                    </Col>
-                </Row>
-              </Container>
-            </div>
-          : <div>Loading...</div>
-          } */}
-
-            {/* {newRec 
-            ? Object.keys(newRec).map(key => {
-                return(
-                    <div>
-                        <hr/>
-                        <hr/>
-                        <h2>{key}</h2>
-                        <p>{newRec[key].toString()}</p>
-                    </div>
-                    )
-                })
-            : null } */}
       </div>
     );
   }
