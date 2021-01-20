@@ -1,0 +1,35 @@
+{
+    "paths": [
+        {
+            "name": "/cb",
+            "lambdaFunction": "callCookbookApi",
+            "privacy": {
+                "open": true
+            },
+            "policyResourceName": "/cb"
+        }
+    ],
+    "resourceName": "myCb",
+    "apiName": "myCb",
+    "functionArns": [
+        {
+            "lambdaFunction": "callCookbookApi"
+        }
+    ],
+    "privacy": {
+        "auth": 0,
+        "unauth": 0,
+        "authRoleName": "amplify-ebrecipes-jsmac-190138-authRole",
+        "unAuthRoleName": "amplify-ebrecipes-jsmac-190138-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "callCookbookApi",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ]
+}

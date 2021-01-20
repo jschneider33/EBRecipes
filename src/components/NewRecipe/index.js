@@ -12,8 +12,8 @@ import './index.css';
 
 import unirest from 'unirest';
 import axios from 'axios';
-import Amplify, { API } from "aws-amplify"
-import config from './aws-exports'
+import { API } from "aws-amplify"
+
 // const NewRecipePage = () => (
 //     // <AuthUserContext.Consumer>
 //     //   {authUser => (
@@ -25,7 +25,7 @@ import config from './aws-exports'
 //     // </AuthUserContext.Consumer>
 //   );
 
-Amplify.configure(config)
+// Amplify.configure(config)
 
 class NewRecipeForm extends Component {
     constructor(props) {
@@ -90,7 +90,21 @@ class NewRecipeForm extends Component {
               currentUrl
             }
           }
-          API.post('myCookbookApi', '/cookbook', myUrl)
+
+          const myInit = {
+            headers: {
+              "content-type": "application/xml",
+              "x-rapidapi-key": process.env.RAPIDAPI_API_KEY,
+              "x-rapidapi-host": 'mycookbook-io1.p.rapidapi.com',
+              "useQueryString": true
+            }, 
+            response: true, // OPTIONAL (return the entire Axios response object instead of only response.data)
+            queryStringParameters: { 
+                body: currentUrl,
+                  }
+          }
+          API
+            .post('mycookbookapi', '/cookbook', myInit)
             .then((data) => {
               const r = data;
               const createdDate = Date.now();

@@ -5,7 +5,10 @@ import App from './components/App';
 import reportWebVitals from './reportWebVitals';
 
 import Firebase, { FirebaseContext } from './components/Firebase';
-// import Amplify from 'aws-amplify'
+import Amplify from 'aws-amplify'
+import config from './aws-exports'
+
+Amplify.configure(config);
  
 ReactDOM.render(
   <FirebaseContext.Provider value={new Firebase()}>
