@@ -29,6 +29,7 @@ app.use(awsServerlessExpressMiddleware.eventContext())
 //   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
 //   next()
 // });
+console.log("Line 32 of app")
 
 app.use(function (request, res, next) {
   console.log("within the app.use for enabling CORS")
@@ -65,7 +66,7 @@ app.use(function (request, res, next) {
 
 app.post('/cookbook', function(req, res) {
 
-    const { myInit } = req.body
+    const { currentUrl } = req.body
 
     const secretObj = await secret()
 
@@ -82,7 +83,7 @@ app.post('/cookbook', function(req, res) {
     
     console.log("Line above axios in app.js")
 
-    axios.request(myInit)
+    axios.request(options)
       .then(res => {
         // console.log(res.data);
         console.log("Successfully entered the Axios .then")

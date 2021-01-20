@@ -100,13 +100,15 @@ class NewRecipeForm extends Component {
             }, 
             response: true, // OPTIONAL (return the entire Axios response object instead of only response.data)
             queryStringParameters: { 
-                body: currentUrl,
+                body: {"currentUrl": currentUrl},
                   }
           }
 
           console.log("Line above API in New Recipe")
           API
-            .post('mycookbookapi', '/cookbook', myInit)
+            .post('mycookbookapi', '/cookbook', {
+              body: {"currentUrl": currentUrl},
+            })
             .then((data) => {
               console.log("Successfully entered the API .then")
 
