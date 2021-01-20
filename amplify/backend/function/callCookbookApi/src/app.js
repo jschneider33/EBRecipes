@@ -34,15 +34,15 @@ app.use(function(req, res, next) {
  * Example get method *
  **********************/
 
-app.get('/cookbook', function(req, res) {
-  // Add your code here
-  res.json({success: 'get call succeed!', url: req.url});
-});
+// app.get('/cookbook', function(req, res) {
+//   // Add your code here
+//   res.json({success: 'get call succeed!', url: req.url});
+// });
 
-app.get('/cookbook/*', function(req, res) {
-  // Add your code here
-  res.json({success: 'get call succeed!', url: req.url});
-});
+// app.get('/cookbook/*', function(req, res) {
+//   // Add your code here
+//   res.json({success: 'get call succeed!', url: req.url});
+// });
 
 /****************************
 * Example post method *
@@ -77,6 +77,7 @@ app.post('/cookbook', function(req, res) {
       console.error(error);
       return res.status(500).send("Error")
     });
+});
 
 // app.post('/cookbook', function(req, res) {
 //   // Add your code here
