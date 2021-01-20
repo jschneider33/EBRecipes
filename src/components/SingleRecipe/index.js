@@ -99,7 +99,7 @@ class SingleRecipe extends Component {
                 cookTime: r.cookTime,
                 totalTime: r.totalTime,
                 url: r.url,
-                dateAdded: r.createdDate,
+                dateAdded: r.dateAdded,
                 lastUpdated: lastUpdated,
                 uploadedBy: r.createdBy,
             })
@@ -162,14 +162,13 @@ class SingleRecipe extends Component {
             isInvalid =
                 recTC.name === '' ||
                 recTC.description === '' ||
-                recTC.image === '' ||
-                recTC.yield === '' ||
-                recTC.prepTime === '' ||
-                recTC.cookTime === '' ||
-                recTC.totalTime === '' ||
+                // recTC.image === '' ||
+                // recTC.yield === '' ||
+                // recTC.prepTime === '' ||
+                // recTC.cookTime === '' ||
+                // recTC.totalTime === '' ||
                 recTC.url === '';
         }
-        
 
         return(
             <div>
