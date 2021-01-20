@@ -2,8 +2,8 @@ import app from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
 // import * as functions from 'firebase-functions';
-import * as admin from 'firebase-admin';
-import functions from 'firebase-functions';
+// import * as admin from 'firebase-admin';
+// import functions from 'firebase-functions';
 
  
 const config = {
@@ -24,16 +24,6 @@ class Firebase {
         this.auth = app.auth();
         this.db = app.database();
     };
-
-    //RapidAPI 
-    getrapidapikey = () => {
-        const apikey = functions.config().rapidapi.api_key;
-        return apikey;
-    }
-    getrapidapihost = () => {
-        const apihost = functions.config().rapidapi.api_host;
-        return apihost;
-    }
 
 // Auth API
     doCreateUserWithEmailAndPassword = (email, password) =>

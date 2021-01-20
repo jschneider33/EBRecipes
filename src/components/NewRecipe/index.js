@@ -74,8 +74,8 @@ class NewRecipeForm extends Component {
 
         req.headers({
             "content-type": "application/xml",
-            "x-rapidapi-key": this.props.firebase.getrapidapikey(),
-            "x-rapidapi-host": this.props.firebase.getrapidapihost(),
+            "x-rapidapi-key": process.env.RAPIDAPI_API_KEY,
+            "x-rapidapi-host": process.env.RAPIDAPI_API_HOST,
             "useQueryString": true
         });
     
