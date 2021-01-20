@@ -203,7 +203,7 @@ class NewRecipeForm extends Component {
             // });
               //})
             .catch(err => {
-              console.error(error);
+              console.error(err);
               // return res.status(500).send("Error")
             });
 
