@@ -138,6 +138,7 @@ class NewRecipeForm extends Component {
           //       console.log(err)
           //     });
 
+
         var options = {
           method: 'POST',
           url: 'https://mycookbook-io1.p.rapidapi.com/recipes/rapidapi',
