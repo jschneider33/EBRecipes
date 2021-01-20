@@ -101,7 +101,7 @@ class SingleRecipe extends Component {
                 url: r.url,
                 dateAdded: r.dateAdded,
                 lastUpdated: lastUpdated,
-                uploadedBy: r.createdBy,
+                uploadedBy: r.uploadedBy,
             })
             .then(() => {
                 console.log("Successfully updated");
