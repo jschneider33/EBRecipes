@@ -1,0 +1,15 @@
+{
+  "jsmac": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-ebrecipes-jsmac-190138-authRole",
+      "UnauthRoleArn": "arn:aws:iam::117743616504:role/amplify-ebrecipes-jsmac-190138-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::117743616504:role/amplify-ebrecipes-jsmac-190138-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-ebrecipes-jsmac-190138-deployment",
+      "UnauthRoleName": "amplify-ebrecipes-jsmac-190138-unauthRole",
+      "StackName": "amplify-ebrecipes-jsmac-190138",
+      "StackId": "arn:aws:cloudformation:us-west-2:117743616504:stack/amplify-ebrecipes-jsmac-190138/d27a3f60-5acb-11eb-be3d-0a0c8367d7c3",
+      "AmplifyAppId": "d5h5kpqvaglzr"
+    }
+  }
+}

@@ -11,7 +11,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import './index.css';
 
 import unirest from 'unirest';
-
+import API from 'aws-amplify';
 // const NewRecipePage = () => (
 //     // <AuthUserContext.Consumer>
 //     //   {authUser => (
@@ -69,85 +69,147 @@ class NewRecipeForm extends Component {
         this.setState({ loading: true })
 
         const { currentUrl, body } = this.state
-        
-        var req = unirest("POST", "https://mycookbook-io1.p.rapidapi.com/recipes/rapidapi");
 
-        req.headers({
-            "content-type": "application/xml",
-            "x-rapidapi-key": process.env.RAPIDAPI_API_KEY,
-            "x-rapidapi-host": process.env.RAPIDAPI_API_HOST,
-            "useQueryString": true
-        });
-    
-        req.send(currentUrl);
-    
-    
-        req.end(res => {
-            if (res.error) throw new Error(res.error);
         
-            const r = res.body[0]; 
-            const createdDate = Date.now();
-            const lastUpdated = Date.now();
-            const createdBy = this.props.firebase.auth.currentUser.uid;
-            
+        
+        // var req = unirest("POST", "https://mycookbook-io1.p.rapidapi.com/recipes/rapidapi");
 
-            const recToAdd = {
-              name: r.name,
-              image: r.images[0],
-              description: r.description,
-              ingredients: r.ingredients,
-              instructions: r.instructions[0].steps,
-              yield: r.yield,
-              prepTime: r["prep-time"],
-              cookTime: r["cook-time"],
-              totalTime: r["total-time"],
-              url: r.url,
-              dateAdded: createdDate,
-              lastUpdated: lastUpdated,
-              uploadedBy: createdBy,
+        // req.headers({
+        //     "content-type": "application/xml",
+        //     "x-rapidapi-key": process.env.RAPIDAPI_API_KEY,
+        //     "x-rapidapi-host": process.env.RAPIDAPI_API_HOST,
+        //     "useQueryString": true
+        // });
+    
+        // req.send(currentUrl);
+
+        
+    
+        
+          const myUrl = {
+            body:{
+              currentUrl
             }
-
-            var newRec = this.props.firebase.addRecipe().push();
-            newRec.set({
-              name: r.name,
-              image: r.images[0],
-              description: r.description,
-              ingredients: r.ingredients,
-              instructions: r.instructions[0].steps,
-              yield: r.yield,
-              prepTime: r["prep-time"],
-              cookTime: r["cook-time"],
-              totalTime: r["total-time"],
-              url: r.url,
-              dateAdded: createdDate,
-              lastUpdated: lastUpdated,
-              uploadedBy: createdBy,
-            });
-
-
-            this.props.firebase
-              .addToUserRecList(newRec.key)
-              .set(r.name)
-              .then(console.log("Added to User Recipe List"))
-              .catch(err => {
-                console.log(err);
+          }
+          API.post('myCookbookApi', '/cookbook', myUrl)
+            .then((data) => {
+              const r = data;
+              const createdDate = Date.now();
+              const lastUpdated = Date.now();
+              const createdBy = this.props.firebase.auth.currentUser.uid;
+              var newRec = this.props.firebase.addRecipe().push();
+              newRec.set({
+                name: r.name,
+                image: r.images[0],
+                description: r.description,
+                ingredients: r.ingredients,
+                instructions: r.instructions[0].steps,
+                yield: r.yield,
+                prepTime: r["prep-time"],
+                cookTime: r["cook-time"],
+                totalTime: r["total-time"],
+                url: r.url,
+                dateAdded: createdDate,
+                lastUpdated: lastUpdated,
+                uploadedBy: createdBy,
               });
 
-            this.props.firebase
-              .addRecipeUserPair(newRec.key)
-              .set(this.props.firebase.auth.currentUser.uid)
-              .then(() => {
-                console.log("Added Recipe User Pair")
-                this.setState({
-                  body: r
-                })
-                this.props.history.push({
-                  pathname: '/'
+              this.props.firebase
+                .addToUserRecList(newRec.key)
+                .set(r.name)
+                .then(console.log("Added to User Recipe List"))
+                .catch(err => {
+                  console.log(err);
                 });
+
+              this.props.firebase
+                .addRecipeUserPair(newRec.key)
+                .set(this.props.firebase.auth.currentUser.uid)
+                .then(() => {
+                  console.log("Added Recipe User Pair")
+                  this.setState({
+                    body: r
+                  })
+                  this.props.history.push({
+                    pathname: '/'
+                  });
+                })
+                .catch(err => {
+                  console.log(err);
+                })
               })
-              .catch(err => {
-                console.log(err);
-              })
+              .catch( err => {
+                console.log(err)
+              });
+
+        
+    
+        // req.end(res => {
+        //     if (res.error) throw new Error(res.error);
+        
+        //     const r = res.body[0]; 
+        //     const createdDate = Date.now();
+        //     const lastUpdated = Date.now();
+        //     const createdBy = this.props.firebase.auth.currentUser.uid;
+            
+
+        //     const recToAdd = {
+        //       name: r.name,
+        //       image: r.images[0],
+        //       description: r.description,
+        //       ingredients: r.ingredients,
+        //       instructions: r.instructions[0].steps,
+        //       yield: r.yield,
+        //       prepTime: r["prep-time"],
+        //       cookTime: r["cook-time"],
+        //       totalTime: r["total-time"],
+        //       url: r.url,
+        //       dateAdded: createdDate,
+        //       lastUpdated: lastUpdated,
+        //       uploadedBy: createdBy,
+        //     }
+
+        //     var newRec = this.props.firebase.addRecipe().push();
+        //     newRec.set({
+        //       name: r.name,
+        //       image: r.images[0],
+        //       description: r.description,
+        //       ingredients: r.ingredients,
+        //       instructions: r.instructions[0].steps,
+        //       yield: r.yield,
+        //       prepTime: r["prep-time"],
+        //       cookTime: r["cook-time"],
+        //       totalTime: r["total-time"],
+        //       url: r.url,
+        //       dateAdded: createdDate,
+        //       lastUpdated: lastUpdated,
+        //       uploadedBy: createdBy,
+        //     });
+
+
+        //     this.props.firebase
+        //       .addToUserRecList(newRec.key)
+        //       .set(r.name)
+        //       .then(console.log("Added to User Recipe List"))
+        //       .catch(err => {
+        //         console.log(err);
+        //       });
+
+        //     this.props.firebase
+        //       .addRecipeUserPair(newRec.key)
+        //       .set(this.props.firebase.auth.currentUser.uid)
+        //       .then(() => {
+        //         console.log("Added Recipe User Pair")
+        //         this.setState({
+        //           body: r
+        //         })
+        //         this.props.history.push({
+        //           pathname: '/'
+        //         });
+        //       })
+        //       .catch(err => {
+        //         console.log(err);
+        //       })
 
               
 
@@ -186,7 +248,7 @@ class NewRecipeForm extends Component {
             //     console.log(err);
             //   })
 
-        });
+        // });
 
         e.preventDefault();
 
