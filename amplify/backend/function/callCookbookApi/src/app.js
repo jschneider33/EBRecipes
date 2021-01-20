@@ -23,10 +23,23 @@ app.use(bodyParser.json())
 app.use(awsServerlessExpressMiddleware.eventContext())
 
 // Enable CORS for all methods
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*")
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-  next()
+// app.use(function(req, res, next) {
+//   console.log("within the app.use for enabling CORS")
+//   res.header("Access-Control-Allow-Origin", "*")
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+//   next()
+// });
+
+app.use(function (request, res, next) {
+  console.log("within the app.use for enabling CORS")
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', '*');
+  //intercept the OPTIONS call so we don't double up on calls to the integration
+  if ('OPTIONS' === request.method) {
+    res.send(200);
+  } else {
+    next();
+  }
 });
 
 
@@ -52,7 +65,7 @@ app.use(function(req, res, next) {
 
 app.post('/cookbook', function(req, res) {
 
-    const { currentUrl } = req.body
+    const { myInit } = req.body
 
     const secretObj = await secret()
 
@@ -67,9 +80,12 @@ app.post('/cookbook', function(req, res) {
       data: currentUrl
     };
     
-    axios.request(options)
+    console.log("Line above axios in app.js")
+
+    axios.request(myInit)
       .then(res => {
         // console.log(res.data);
+        console.log("Successfully entered the Axios .then")
         const recipeData = res.data.body[0]
         return res.send(recipeData)
       })

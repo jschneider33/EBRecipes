@@ -103,9 +103,13 @@ class NewRecipeForm extends Component {
                 body: currentUrl,
                   }
           }
+
+          console.log("Line above API in New Recipe")
           API
             .post('mycookbookapi', '/cookbook', myInit)
             .then((data) => {
+              console.log("Successfully entered the API .then")
+
               const r = data;
               const createdDate = Date.now();
               const lastUpdated = Date.now();
