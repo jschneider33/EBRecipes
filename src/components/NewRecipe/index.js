@@ -68,10 +68,8 @@ class NewRecipeForm extends Component {
     onSubmit = e => {
         this.setState({ loading: true })
 
-        const { currentUrl, body } = this.state
-
-        
-        
+        const { currentUrl } = this.state
+ 
         // var req = unirest("POST", "https://mycookbook-io1.p.rapidapi.com/recipes/rapidapi");
 
         // req.headers({
@@ -83,9 +81,6 @@ class NewRecipeForm extends Component {
     
         // req.send(currentUrl);
 
-        
-    
-        
           const myUrl = {
             body:{
               currentUrl
