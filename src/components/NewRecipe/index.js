@@ -12,7 +12,8 @@ import './index.css';
 
 import unirest from 'unirest';
 import axios from 'axios';
-import API from 'aws-amplify';
+import Amplify, { API } from "aws-amplify"
+import config from './aws-exports'
 // const NewRecipePage = () => (
 //     // <AuthUserContext.Consumer>
 //     //   {authUser => (
@@ -23,6 +24,8 @@ import API from 'aws-amplify';
 //     //   )}
 //     // </AuthUserContext.Consumer>
 //   );
+
+Amplify.configure(config)
 
 class NewRecipeForm extends Component {
     constructor(props) {
